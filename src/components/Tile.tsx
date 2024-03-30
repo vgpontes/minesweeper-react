@@ -1,7 +1,9 @@
+import "./Minesweeper.css"
+
 export function Tile() {
     return (
-        <button>
-            Hello
+        <button className="Tile">
+            1
         </button>
-    );
+    )
 }
