@@ -1,18 +1,20 @@
-.Container {
-    width: 500px; /* Set width of the container */
-    height: 500px; /* Set height of the container */
-    display: flex;
-    justify-content: center;
-    align-items: center;
+#container {
+    height: 100%;
+    width: 100%;
+    background-color: red;
 }
 
 .Tile {
-    width: 100%; /* Adjust button width as needed */
-    height: 100%; /* Adjust button height as needed */
-    background-color: #007bff; /* Button background color */
-    color: #ffffff; /* Button text color */
-    border: none; /* Remove button border */
-    border-radius: 5px; /* Add border radius if desired */
-    cursor: pointer; /* Show pointer cursor on hover */
-    outline: none; /* Remove outline on focus */
+    height: 100%;
+    width: 100%;
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+}
+
+.Row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
