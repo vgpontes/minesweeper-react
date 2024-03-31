@@ -5,7 +5,7 @@ function App() {
   
   return (
     <div style={{ width: "100vw", height: "100vh", backgroundColor: "green", display: "flex", alignItems: "center", justifyContent: "center"}}>
-      <MinesweeperGame numMines={0} boardHeight={5} boardWidth={3}/>
+      <MinesweeperGame numMines={0} boardHeight={5} boardWidth={5}/>
     </div>
   );
 }

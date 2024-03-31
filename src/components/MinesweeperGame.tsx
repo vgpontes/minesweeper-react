@@ -17,11 +17,16 @@ export default function MinesweeperGame(props:MinesweeperProps) {
         const resizeObserver = new ResizeObserver(debounce((entries) => {
             for (let entry of entries) {
                 const { width, height } = entry.contentRect;
-                const size = Math.min(width, height);
-                container.style.width = size + "px";
-                container.style.height = size + "px";
-
-                const newTileSize = size / boardHeight;
+                let newTileSize;
+                if (width < height) {
+                    container.style.width = width + "px";
+                    container.style.height = width + "px";
+                    newTileSize = width / boardHeight;
+                } else {
+                    container.style.width = height + "px";
+                    container.style.height = height + "px";
+                    newTileSize = height / boardWidth;
+                }
                 setTileSize(newTileSize);
             }
 
@@ -44,7 +49,7 @@ export default function MinesweeperGame(props:MinesweeperProps) {
                             rowIndex={rowIndex} 
                             colIndex={colIndex} 
                             tileSize={tileSize}
-                            minesNearby={board[rowIndex][colIndex]}
+                            minesNearby={tile}
                         />
                     ))}
                 </div>
