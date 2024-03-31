@@ -1,12 +1,21 @@
 import { useEffect, useState } from "react";
-import { Minesweeper, MinesweeperProps } from "../utils/Minesweeper"
+import { Coordinate, Minesweeper, MinesweeperProps } from "../utils/Minesweeper"
 import { Tile } from "./Tile"
 import { debounce } from "lodash"
 
+export enum GAME_STATUS {
+    InProgress,
+    Win,
+    Lose
+}
+
 export default function MinesweeperGame(props:MinesweeperProps) {
+    const [game, setGame] = useState(new Minesweeper(props))
     const [tileSize, setTileSize] = useState(0);
-    const game = new Minesweeper(props);
-    const board = game.board;
+    const [firstPress, setFirstPress] = useState(true);
+    const [revealCount, setRevealCount] = useState(0);
+    const [gameStatus, setGameStatus] = useState(GAME_STATUS.InProgress);
+    const [board, setBoard] = useState(game.board);
     const boardWidth = board[0].length;
     const boardHeight = board.length;
 
@@ -39,6 +48,34 @@ export default function MinesweeperGame(props:MinesweeperProps) {
         };
     }, []);
 
+    const onTileClick = (rowIndex:number, colIndex:number) => {
+        if (board[rowIndex][colIndex].isRevealed) return;
+
+        if (firstPress) {
+            game.placeMines(rowIndex, colIndex);
+            setFirstPress(false);
+        }
+        var newBoard = [...game.board];
+        var countObj = { val: revealCount };
+        game.revealTile(rowIndex, colIndex, countObj);
+
+        const newRevealCount = countObj.val;
+        setRevealCount(newRevealCount);
+        if (newBoard[rowIndex][colIndex].isMine) {
+            // Reveal all bomb locations
+            game.getMineCoordinates().forEach((coordinate) => {
+                game.revealTile(coordinate.x, coordinate.y);
+            });
+            console.log("You Lose");
+            setGameStatus(GAME_STATUS.Lose);
+        }
+        else if (newRevealCount == (boardHeight * boardWidth - game.getNumMines())) {
+            console.log("You Win");
+            setGameStatus(GAME_STATUS.Win);
+        }
+        setBoard(newBoard);
+    }
+
     return (
         <div id="container" style={{ gridTemplateColumns: `repeat(${boardWidth * boardHeight}, ${tileSize}px)` }}>
             {
@@ -49,7 +86,9 @@ export default function MinesweeperGame(props:MinesweeperProps) {
                             rowIndex={rowIndex} 
                             colIndex={colIndex} 
                             tileSize={tileSize}
-                            minesNearby={tile}
+                            tileInfo={tile}
+                            onClick={onTileClick}
+                            gameStatus={gameStatus}
                         />
                     ))}
                 </div>

@@ -4,26 +4,14 @@ export interface MinesweeperProps {
     numMines : number
 }
 
-export class Minesweeper {
-    readonly board : number[][];
-    readonly numMines : number;
-
-    constructor(props : MinesweeperProps) {
-        this.board = new Array(props.boardWidth).fill(null).map(() => {
-            return new Array(props.boardHeight).fill(null).map(() => 0);
-        });
-        this.numMines = props.numMines;
-    }
-}
-
-/*export interface TileInfo {
+export interface TileInfo {
     minesNearby : number,
     isMine : boolean
     isFlagged : boolean,
     isRevealed : boolean
 }
 
-interface Coordinate {
+export interface Coordinate {
     x : number,
     y : number
 }
@@ -31,19 +19,19 @@ interface Coordinate {
 export class Minesweeper {
     readonly board : TileInfo[][];
     private mineCoordinates : Coordinate[];
-    private numMines : number
+    readonly numMines : number;
 
     constructor(props : MinesweeperProps) {
         this.board = new Array(props.boardWidth).fill(null).map(() => {
             return new Array(props.boardHeight).fill(null).map(() => ({
-              minesNearby: 0,
-              isFlagged: false,
-              isRevealed: false,
-              isMine: false
+                minesNearby: 0,
+                isMine: false,
+                isFlagged: false,
+                isRevealed: false
             }));
         });
-        this.numMines = props.numMines;
         this.mineCoordinates = [];
+        this.numMines = props.numMines;
     }
 
     printBoard() {
@@ -57,17 +45,13 @@ export class Minesweeper {
         console.log(text + "\n\n\n\n\n")
     }
 
-    getMineCoordinates() {
-        return this.mineCoordinates;
-    }
-
     placeMines(initialX : number, initialY : number) {
         var placedMines = 0;
         var coordinates : Coordinate[] = [];
         
         for (let i = 0; i < this.board.length; i++) {
             for (let j = 0; j < this.board[0].length; j++) {
-                if (this.isValidNeighbor(i, j, initialX, initialY)) continue;
+                if (isValidNeighbor(i, j, initialX, initialY)) continue;
                 coordinates.push({x: i, y: j}); 
             }
         }
@@ -85,11 +69,15 @@ export class Minesweeper {
             placedMines++;
         }
     }
-    
-    isValidNeighbor(x : number, y : number, initialX : number, initialY : number) {
-        return (x == initialX && y == initialY) || (Math.abs(x - initialX) <= 1 && Math.abs(y - initialY) <= 1);
+
+    getNumMines() {
+        return this.numMines;
     }
-    
+
+    getMineCoordinates() {
+        return this.mineCoordinates;
+    }
+
     calculateNeighbors(i : number, j : number) {
         const positions = [
             [-1, -1], [-1, 0], [-1, 1],
@@ -107,8 +95,8 @@ export class Minesweeper {
             }
         })
     }
-    
-    revealTile(i: number, j : number, countObj:any) {
+
+    revealTile(i: number, j : number, countObj?:any) {
         if (i < 0 || i >= this.board.length || j < 0 || j >= this.board[0].length || this.board[i][j].isRevealed || 
             this.board[i][j].isFlagged) return;
         this.board[i][j].isRevealed = true;
@@ -126,8 +114,8 @@ export class Minesweeper {
             this.revealTile(i - 1, j + 1, countObj);
         }
     }
+}
 
-    getNumMines() {
-        return this.numMines;
-    }
-}*/
+function isValidNeighbor(x : number, y : number, initialX : number, initialY : number) {
+    return (x == initialX && y == initialY) || (Math.abs(x - initialX) <= 1 && Math.abs(y - initialY) <= 1);
+}
