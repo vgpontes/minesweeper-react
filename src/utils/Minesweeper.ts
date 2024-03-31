@@ -4,7 +4,19 @@ export interface MinesweeperProps {
     numMines : number
 }
 
-export interface TileInfo {
+export class Minesweeper {
+    readonly board : number[][];
+    readonly numMines : number;
+
+    constructor(props : MinesweeperProps) {
+        this.board = new Array(props.boardWidth).fill(null).map(() => {
+            return new Array(props.boardHeight).fill(null).map(() => 0);
+        });
+        this.numMines = props.numMines;
+    }
+}
+
+/*export interface TileInfo {
     minesNearby : number,
     isMine : boolean
     isFlagged : boolean,
@@ -96,26 +108,26 @@ export class Minesweeper {
         })
     }
     
-    revealTile(i: number, j : number) {
+    revealTile(i: number, j : number, countObj:any) {
         if (i < 0 || i >= this.board.length || j < 0 || j >= this.board[0].length || this.board[i][j].isRevealed || 
             this.board[i][j].isFlagged) return;
         this.board[i][j].isRevealed = true;
-        // //if (countObj) {
-        //     countObj.val++;
-        // }
+        if (countObj) {
+            countObj.val++;
+        }
         if (this.board[i][j].minesNearby === 0) {
-            // this.revealTile(i + 1, j, countObj);
-            // this.revealTile(i - 1, j, countObj);
-            // this.revealTile(i, j + 1, countObj);
-            // this.revealTile(i, j - 1, countObj);
-            // this.revealTile(i + 1, j - 1, countObj);
-            // this.revealTile(i - 1, j - 1, countObj);
-            // this.revealTile(i + 1, j + 1, countObj);
-            // this.revealTile(i - 1, j + 1, countObj);
+            this.revealTile(i + 1, j, countObj);
+            this.revealTile(i - 1, j, countObj);
+            this.revealTile(i, j + 1, countObj);
+            this.revealTile(i, j - 1, countObj);
+            this.revealTile(i + 1, j - 1, countObj);
+            this.revealTile(i - 1, j - 1, countObj);
+            this.revealTile(i + 1, j + 1, countObj);
+            this.revealTile(i - 1, j + 1, countObj);
         }
     }
 
     getNumMines() {
         return this.numMines;
     }
-}
+}*/
