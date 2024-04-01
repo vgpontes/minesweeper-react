@@ -4,6 +4,7 @@ import { Tile } from "./Tile"
 import { debounce } from "lodash"
 import { FlagBox } from "./FlagBox";
 import "./Minesweeper.css"
+import { Smiley } from "./Smiley";
 
 export enum GAME_STATUS {
     InProgress,
@@ -19,6 +20,7 @@ export default function MinesweeperGame(props:MinesweeperProps) {
     const [gameStatus, setGameStatus] = useState(GAME_STATUS.InProgress);
     const [board, setBoard] = useState(game.board);
     const [numFlagsPlaced, setNumFlagsPlaced] = useState(0);
+    const [isHold, setIsHold] = useState(false);
     const boardWidth = board[0].length;
     const boardHeight = board.length;
     const numFlags = game.getNumMines();
@@ -26,6 +28,7 @@ export default function MinesweeperGame(props:MinesweeperProps) {
     useEffect(() => {
         const container = document.getElementById('container')!;
         const flagBoxHeight = document.getElementById('flagbox')!.clientHeight;
+        const smileyHeight = document.getElementById('smiley')!.clientHeight;
         const parent = container.parentElement!;
     
         const resizeObserver = new ResizeObserver(debounce((entries) => {
@@ -37,7 +40,7 @@ export default function MinesweeperGame(props:MinesweeperProps) {
                     container.style.height = width + "px";
                     newTileSize = width / boardHeight;
                 } else {
-                    const newHeight = height - flagBoxHeight - 20;
+                    const newHeight = height - flagBoxHeight - smileyHeight - 30;
                     container.style.width = newHeight + "px";
                     container.style.height = newHeight + "px";
                     newTileSize = newHeight / boardWidth;
@@ -81,6 +84,7 @@ export default function MinesweeperGame(props:MinesweeperProps) {
             setGameStatus(GAME_STATUS.Win);
         }
         setBoard(newBoard);
+        setIsHold(false)
     }
 
     const onTileRightClick = (rowIndex : number, colIndex : number) => {
@@ -90,6 +94,7 @@ export default function MinesweeperGame(props:MinesweeperProps) {
         const newFlagsPlaced = tileIsFlagged ? numFlagsPlaced - 1 : numFlagsPlaced + 1;
         setNumFlagsPlaced(newFlagsPlaced);
         setBoard(newBoard);
+        setIsHold(false)
     }
 
     return (
@@ -101,6 +106,7 @@ export default function MinesweeperGame(props:MinesweeperProps) {
             alignItems: "center", 
             flexDirection: "column"
             }}>
+            <Smiley gameStatus={gameStatus} hold={isHold}/>
             <FlagBox numFlags={numFlags - numFlagsPlaced}/>
             <div id="container" style={{ gridTemplateColumns: `repeat(${boardWidth * boardHeight}, ${tileSize}px)` }}>
             {
@@ -115,6 +121,7 @@ export default function MinesweeperGame(props:MinesweeperProps) {
                             onClick={onTileClick}
                             onRightClick={onTileRightClick}
                             gameStatus={gameStatus}
+                            onHold={() => setIsHold(true)}
                         />
                     ))}
                 </div>

@@ -12,20 +12,23 @@ export interface TileProps {
     gameStatus: GAME_STATUS
     onClick: (i:number, j:number) => void
     onRightClick: (i:number, j:number) => void
+    onHold: () => void;
 }
 
 export function Tile(props:TileProps) {
     const [isMouseHovering, setMouseHovering] = useState(false);
+    const [isMousePressed, setMousePressed] = useState(false);
     const {minesNearby, isFlagged, isRevealed, isMine} = props.tileInfo;
     const [isDisabled, setDisabled] = useState(false);
     
-    const onMouseDown = (e: React.MouseEvent<HTMLElement>) => {
+    const onClick = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
         if (e.button == 0) {
             props.onClick(props.rowIndex, props.colIndex);
         } else if (e.button == 2) {
             props.onRightClick(props.rowIndex, props.colIndex);
         }
+        setMousePressed(false);
     }
 
     const tileText = () => {
@@ -44,6 +47,10 @@ export function Tile(props:TileProps) {
     }
 
     const bgColorPicker = () => {
+        if (isMousePressed) {
+            props.onHold();
+            return '#428A3A'
+        }
         if (isMouseHovering) {
             if (!isRevealed) {
                 return '#62B958'; // color of grass when mouse is over tile
@@ -59,7 +66,9 @@ export function Tile(props:TileProps) {
     }
 
     const longPress = useLongPress(() => {
-        if (!isRevealed && props.gameStatus == GAME_STATUS.InProgress) props.onRightClick(props.rowIndex, props.colIndex);
+        if (!isRevealed && props.gameStatus == GAME_STATUS.InProgress) {
+            props.onRightClick(props.rowIndex, props.colIndex);
+        };
     }, {
         filterEvents: () => true,
         detect: LongPressEventType.Touch
@@ -70,8 +79,9 @@ export function Tile(props:TileProps) {
         <button className="Tile"
         onContextMenu={(e)=> e.preventDefault()}
         onMouseEnter={() => setMouseHovering(true)} 
-        onMouseLeave={() => setMouseHovering(false)} 
-        onMouseUp={onMouseDown}
+        onMouseLeave={() => {setMouseHovering(false); setMousePressed(false)}}
+        onMouseDown={() => setMousePressed(true)}
+        onMouseUp={onClick}
         {...longPress()}
         disabled={isRevealed || props.gameStatus == GAME_STATUS.Win || props.gameStatus == GAME_STATUS.Lose} 
         style={{width: props.tileSize, height: props.tileSize, backgroundColor: bgColor}}>

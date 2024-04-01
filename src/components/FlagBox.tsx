@@ -16,6 +16,7 @@ export function FlagBox(props : FlagBoxProps) {
             gap: 25,
             marginBottom: 10,
             display: "flex",
+            border: "1px solid black"
             }}>
             <IoFlagSharp color="red"/>
             <p style={{fontFamily: "Cabin"}}>{props.numFlags}</p>
