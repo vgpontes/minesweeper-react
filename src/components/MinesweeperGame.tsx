@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Minesweeper, MinesweeperProps, TileInfo } from "../utils/Minesweeper"
 import { Tile } from "./Tile"
-import { debounce } from "lodash"
 import { FlagBox } from "./FlagBox";
 import "./Minesweeper.css"
 import { Smiley } from "./Smiley";
@@ -20,6 +19,7 @@ export default function MinesweeperGame(props:MinesweeperProps) {
     const [board, setBoard] = useState(game.board);
     const [numFlagsPlaced, setNumFlagsPlaced] = useState(0);
     const [isHold, setIsHold] = useState(false);
+    const [tileSize, setTileSize] = useState(50);
     const numFlags = game.getNumMines();
 
     const onTileClick = (rowIndex:number, colIndex:number) => {
@@ -62,7 +62,19 @@ export default function MinesweeperGame(props:MinesweeperProps) {
         setIsHold(false)
     }
 
-      const tileSize = 50; // Adjust as needed for tile size
+      useEffect(() => {
+        const handleResize = () => {
+          // Calculate the tile size based on the screen width and the number of tiles in a row
+          const parent = document.getElementById("container")!.parentElement!;
+          const tileSize = Math.min(parent.clientWidth / props.boardWidth, parent.clientHeight / props.boardHeight) - 100;
+          setTileSize(tileSize);
+        };
+        handleResize();
+        window.addEventListener("resize", handleResize);
+        return () => {
+          window.removeEventListener("resize", handleResize);
+        };
+      }, []);
 
       return (
         <div style={{
@@ -75,7 +87,7 @@ export default function MinesweeperGame(props:MinesweeperProps) {
             }}>
             <Smiley gameStatus={gameStatus} hold={isHold}/>
             <FlagBox numFlags={numFlags - numFlagsPlaced}/>
-            <div style={{ display: "grid", gridTemplateColumns: `repeat(${props.boardWidth}, ${tileSize}px)`, gridAutoRows: `${tileSize}px` }}>
+            <div id="container" style={{ display: "grid", gridTemplateColumns: `repeat(${props.boardWidth}, ${tileSize}px)`, gridAutoRows: `${tileSize}px` }}>
                 {board.map((row, rowIndex) => (
                     row.map((tile, colIndex) => (
                     <Tile
