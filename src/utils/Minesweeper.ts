@@ -114,6 +114,11 @@ export class Minesweeper {
             this.revealTile(i - 1, j + 1, countObj);
         }
     }
+
+    revealBomb(i: number, j : number) {
+        this.board[i][j].isRevealed = true;
+        this.board[i][j].isFlagged = false;
+    }
 }
 
 function isValidNeighbor(x : number, y : number, initialX : number, initialY : number) {

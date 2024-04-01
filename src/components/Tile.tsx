@@ -1,8 +1,8 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { TileInfo } from "../utils/Minesweeper"
-import "./Minesweeper.css"
 import { GAME_STATUS } from "./MinesweeperGame";
-import { LongPressEventType, LongPressReactEvents, useLongPress } from "use-long-press";
+import { LongPressEventType, useLongPress } from "use-long-press";
+import { IoFlagSharp } from "react-icons/io5";
 
 export interface TileProps {
     tileInfo : TileInfo,
@@ -30,8 +30,7 @@ export function Tile(props:TileProps) {
 
     const tileText = () => {
         if (isFlagged) {
-            //return <MaterialCommunityIcons name="flag-variant" color="red" size={24}/>
-            return <p style={{userSelect:"none"}}>{"\u{1F6A9}"}</p>;
+            return <IoFlagSharp color="red"/>
         }
         if (!isRevealed) {
             return null;
@@ -47,16 +46,16 @@ export function Tile(props:TileProps) {
     const bgColorPicker = () => {
         if (isMouseHovering) {
             if (!isRevealed) {
-                return '#62B958';
+                return '#62B958'; // color of grass when mouse is over tile
             }
         }
         if (!isRevealed) {
-            return '#8FE186';
+            return '#8FE186'; // color of grass
         }
         if (isMine) {
-            return '#D33F49';
+            return '#D33F49'; // Red Mine color
         }
-        return '#EFD8A3'
+        return '#EFD8A3' // Dirt color
     }
 
     const longPress = useLongPress(() => {

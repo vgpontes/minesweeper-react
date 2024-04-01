@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Coordinate, Minesweeper, MinesweeperProps } from "../utils/Minesweeper"
 import { Tile } from "./Tile"
 import { debounce } from "lodash"
+import { FlagBox } from "./FlagBox";
+import "./Minesweeper.css"
 
 export enum GAME_STATUS {
     InProgress,
@@ -19,9 +21,11 @@ export default function MinesweeperGame(props:MinesweeperProps) {
     const [numFlagsPlaced, setNumFlagsPlaced] = useState(0);
     const boardWidth = board[0].length;
     const boardHeight = board.length;
+    const numFlags = game.getNumMines();
 
     useEffect(() => {
         const container = document.getElementById('container')!;
+        const flagBoxHeight = document.getElementById('flagbox')!.clientHeight;
         const parent = container.parentElement!;
     
         const resizeObserver = new ResizeObserver(debounce((entries) => {
@@ -33,9 +37,10 @@ export default function MinesweeperGame(props:MinesweeperProps) {
                     container.style.height = width + "px";
                     newTileSize = width / boardHeight;
                 } else {
-                    container.style.width = height + "px";
-                    container.style.height = height + "px";
-                    newTileSize = height / boardWidth;
+                    const newHeight = height - flagBoxHeight - 20;
+                    container.style.width = newHeight + "px";
+                    container.style.height = newHeight + "px";
+                    newTileSize = newHeight / boardWidth;
                 }
                 setTileSize(newTileSize);
             }
@@ -66,7 +71,7 @@ export default function MinesweeperGame(props:MinesweeperProps) {
         if (newBoard[rowIndex][colIndex].isMine) {
             // Reveal all bomb locations
             game.getMineCoordinates().forEach((coordinate) => {
-                game.revealTile(coordinate.x, coordinate.y);
+                game.revealBomb(coordinate.x, coordinate.y);
             });
             console.log("You Lose");
             setGameStatus(GAME_STATUS.Lose);
@@ -88,7 +93,16 @@ export default function MinesweeperGame(props:MinesweeperProps) {
     }
 
     return (
-        <div id="container" style={{ gridTemplateColumns: `repeat(${boardWidth * boardHeight}, ${tileSize}px)` }}>
+        <div style={{
+            height: "100%", 
+            width: "100%", 
+            display: "flex", 
+            justifyContent: "center", 
+            alignItems: "center", 
+            flexDirection: "column"
+            }}>
+            <FlagBox numFlags={numFlags - numFlagsPlaced}/>
+            <div id="container" style={{ gridTemplateColumns: `repeat(${boardWidth * boardHeight}, ${tileSize}px)` }}>
             {
             board.map((row, rowIndex) => (
                 <div key={rowIndex} className="Row">
@@ -105,6 +119,7 @@ export default function MinesweeperGame(props:MinesweeperProps) {
                     ))}
                 </div>
             ))}
+            </div>
         </div>
     )
 }
