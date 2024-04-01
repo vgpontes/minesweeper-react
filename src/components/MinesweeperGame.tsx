@@ -104,7 +104,8 @@ export default function MinesweeperGame(props:MinesweeperProps) {
             display: "flex", 
             justifyContent: "center", 
             alignItems: "center", 
-            flexDirection: "column"
+            flexDirection: "column",
+            userSelect: "none"
             }}>
             <Smiley gameStatus={gameStatus} hold={isHold}/>
             <FlagBox numFlags={numFlags - numFlagsPlaced}/>
