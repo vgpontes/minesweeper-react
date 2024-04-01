@@ -1,21 +1,39 @@
+import { useEffect, useState } from 'react';
 import MinesweeperGame from './components/MinesweeperGame';
 
 function App() {
-  window.addEventListener('DOMContentLoaded', function() {
-    function adjustHeight() {
-        var windowHeight = window.innerHeight;
-        document.getElementById('main')!.style.height = windowHeight + 'px';
-    }
+  const [windowSize, setWindowSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
 
-    adjustHeight();
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
 
-    window.addEventListener('resize', function() {
-        adjustHeight();
-    });
-});
-  
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  // Calculate dimensions based on window size
+  const calculateDimensions = () => {
+    // You can adjust this logic according to your requirements
+    let height = windowSize.height * 0.8; // 60% of window height
+
+    return height;
+  };
+
+  const height = calculateDimensions();
+
   return (
-    <div id="main" style={{ height: "100vh", width:"100vw", backgroundColor: "green", display: "flex", alignItems: "center", justifyContent: "center", overflow: "auto"}}>
+    <div style={{height}}>
       <MinesweeperGame numMines={10} boardHeight={9} boardWidth={9}/>
     </div>
   );
