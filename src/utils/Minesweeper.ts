@@ -19,7 +19,7 @@ export interface Coordinate {
 export class Minesweeper {
     readonly board : TileInfo[][];
     private mineCoordinates : Coordinate[];
-    readonly numMines : number;
+    private numMines : number;
 
     constructor(props : MinesweeperProps) {
         this.board = new Array(props.boardWidth).fill(null).map(() => {
@@ -56,7 +56,7 @@ export class Minesweeper {
             }
         }
     
-        while (placedMines < this.numMines) {
+        while (coordinates.length > 0 && placedMines < this.numMines) {
             const randomCoordinate = coordinates[Math.floor(Math.random() * coordinates.length)];
             const x = randomCoordinate.x;
             const y = randomCoordinate.y;
@@ -67,6 +67,10 @@ export class Minesweeper {
             const index =  coordinates.indexOf(randomCoordinate);
             coordinates.splice(index, 1);
             placedMines++;
+        }
+
+        if (placedMines != this.numMines) {
+            this.numMines = placedMines;
         }
     }
 

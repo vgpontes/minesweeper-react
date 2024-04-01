@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Minesweeper, MinesweeperProps } from "../utils/Minesweeper"
+import { useEffect, useRef, useState } from "react";
+import { Minesweeper, MinesweeperProps, TileInfo } from "../utils/Minesweeper"
 import { Tile } from "./Tile"
 import { debounce } from "lodash"
 import { FlagBox } from "./FlagBox";
@@ -14,48 +14,13 @@ export enum GAME_STATUS {
 
 export default function MinesweeperGame(props:MinesweeperProps) {
     const [game, setGame] = useState(new Minesweeper(props))
-    const [tileSize, setTileSize] = useState(0);
     const [firstPress, setFirstPress] = useState(true);
     const [revealCount, setRevealCount] = useState(0);
     const [gameStatus, setGameStatus] = useState(GAME_STATUS.InProgress);
     const [board, setBoard] = useState(game.board);
     const [numFlagsPlaced, setNumFlagsPlaced] = useState(0);
     const [isHold, setIsHold] = useState(false);
-    const boardWidth = board[0].length;
-    const boardHeight = board.length;
     const numFlags = game.getNumMines();
-
-    useEffect(() => {
-        const container = document.getElementById('container')!;
-        const flagBoxHeight = document.getElementById('flagbox')!.clientHeight;
-        const smileyHeight = document.getElementById('smiley')!.clientHeight;
-        const parent = container.parentElement!;
-    
-        const resizeObserver = new ResizeObserver(debounce((entries) => {
-            for (let entry of entries) {
-                const { width, height } = entry.contentRect;
-                let newTileSize;
-                if (width < height) {
-                    container.style.width = width + "px";
-                    container.style.height = width + "px";
-                    newTileSize = width / boardHeight;
-                } else {
-                    const newHeight = height - flagBoxHeight - smileyHeight - 30;
-                    container.style.width = newHeight + "px";
-                    container.style.height = newHeight + "px";
-                    newTileSize = newHeight / boardWidth * 0.8;
-                }
-                setTileSize(newTileSize);
-            }
-
-        }));
-    
-        resizeObserver.observe(parent);
-    
-        return () => {
-            resizeObserver.unobserve(parent);
-        };
-    }, []);
 
     const onTileClick = (rowIndex:number, colIndex:number) => {
         if (board[rowIndex][colIndex].isRevealed ||
@@ -79,7 +44,7 @@ export default function MinesweeperGame(props:MinesweeperProps) {
             console.log("You Lose");
             setGameStatus(GAME_STATUS.Lose);
         }
-        else if (newRevealCount == (boardHeight * boardWidth - game.getNumMines())) {
+        else if (newRevealCount == (props.boardHeight * props.boardWidth - game.getNumMines())) {
             console.log("You Win");
             setGameStatus(GAME_STATUS.Win);
         }
@@ -97,37 +62,36 @@ export default function MinesweeperGame(props:MinesweeperProps) {
         setIsHold(false)
     }
 
-    return (
+      const tileSize = 50; // Adjust as needed for tile size
+
+      return (
         <div style={{
             height: "100%", 
             width: "100%", 
             display: "flex", 
             justifyContent: "center", 
             alignItems: "center", 
-            flexDirection: "column",
-            userSelect: "none"
+            flexDirection: "column"
             }}>
             <Smiley gameStatus={gameStatus} hold={isHold}/>
             <FlagBox numFlags={numFlags - numFlagsPlaced}/>
-            <div id="container" style={{ gridTemplateColumns: `repeat(${boardWidth * boardHeight}, ${tileSize}px)` }}>
-            {
-            board.map((row, rowIndex) => (
-                <div key={rowIndex} className="Row">
-                    {row.map((tile, colIndex) => (
-                        <Tile key={`${rowIndex}${colIndex}`} 
-                            rowIndex={rowIndex} 
-                            colIndex={colIndex} 
-                            tileSize={tileSize}
-                            tileInfo={tile}
-                            onClick={onTileClick}
-                            onRightClick={onTileRightClick}
-                            gameStatus={gameStatus}
-                            onHold={() => setIsHold(true)}
-                        />
-                    ))}
-                </div>
-            ))}
+            <div style={{ display: "grid", gridTemplateColumns: `repeat(${props.boardWidth}, ${tileSize}px)`, gridAutoRows: `${tileSize}px` }}>
+                {board.map((row, rowIndex) => (
+                    row.map((tile, colIndex) => (
+                    <Tile
+                        key={`${rowIndex}-${colIndex}`}
+                        tileInfo={tile}
+                        rowIndex={rowIndex}
+                        colIndex={colIndex}
+                        tileSize={tileSize}
+                        gameStatus={gameStatus}
+                        onClick={onTileClick}
+                        onRightClick={onTileRightClick}
+                        onHold={() => setIsHold(true)}
+                    />))
+                ))}
             </div>
         </div>
     )
+    
 }
