@@ -38,7 +38,6 @@ export function Tile(props:TileProps) {
             return null;
         }
         if (isMine) {
-            //return <MaterialCommunityIcons name="bomb" size={24} color="black" />
             return <p style={{userSelect:"none"}}>{"\u{1F4A3}"}</p>;
         }
         const fontColor = new Map([[1, "blue"], [2, "green"], [3, "red"], [4, "purple"]]);
