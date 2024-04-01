@@ -16,6 +16,7 @@ export default function MinesweeperGame(props:MinesweeperProps) {
     const [revealCount, setRevealCount] = useState(0);
     const [gameStatus, setGameStatus] = useState(GAME_STATUS.InProgress);
     const [board, setBoard] = useState(game.board);
+    const [numFlagsPlaced, setNumFlagsPlaced] = useState(0);
     const boardWidth = board[0].length;
     const boardHeight = board.length;
 
@@ -49,7 +50,8 @@ export default function MinesweeperGame(props:MinesweeperProps) {
     }, []);
 
     const onTileClick = (rowIndex:number, colIndex:number) => {
-        if (board[rowIndex][colIndex].isRevealed) return;
+        if (board[rowIndex][colIndex].isRevealed ||
+            board[rowIndex][colIndex].isFlagged) return;
 
         if (firstPress) {
             game.placeMines(rowIndex, colIndex);
@@ -76,6 +78,15 @@ export default function MinesweeperGame(props:MinesweeperProps) {
         setBoard(newBoard);
     }
 
+    const onTileRightClick = (rowIndex : number, colIndex : number) => {
+        const newBoard = [...board];
+        const tileIsFlagged = newBoard[rowIndex][colIndex].isFlagged
+        newBoard[rowIndex][colIndex].isFlagged = !tileIsFlagged
+        const newFlagsPlaced = tileIsFlagged ? numFlagsPlaced - 1 : numFlagsPlaced + 1;
+        setNumFlagsPlaced(newFlagsPlaced);
+        setBoard(newBoard);
+    }
+
     return (
         <div id="container" style={{ gridTemplateColumns: `repeat(${boardWidth * boardHeight}, ${tileSize}px)` }}>
             {
@@ -88,6 +99,7 @@ export default function MinesweeperGame(props:MinesweeperProps) {
                             tileSize={tileSize}
                             tileInfo={tile}
                             onClick={onTileClick}
+                            onRightClick={onTileRightClick}
                             gameStatus={gameStatus}
                         />
                     ))}
