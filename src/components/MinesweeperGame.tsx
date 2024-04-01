@@ -43,7 +43,7 @@ export default function MinesweeperGame(props:MinesweeperProps) {
                     const newHeight = height - flagBoxHeight - smileyHeight - 30;
                     container.style.width = newHeight + "px";
                     container.style.height = newHeight + "px";
-                    newTileSize = newHeight / boardWidth;
+                    newTileSize = newHeight / boardWidth * 0.8;
                 }
                 setTileSize(newTileSize);
             }
