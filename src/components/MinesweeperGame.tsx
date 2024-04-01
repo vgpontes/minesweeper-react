@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Coordinate, Minesweeper, MinesweeperProps } from "../utils/Minesweeper"
+import { Minesweeper, MinesweeperProps } from "../utils/Minesweeper"
 import { Tile } from "./Tile"
 import { debounce } from "lodash"
 import { FlagBox } from "./FlagBox";

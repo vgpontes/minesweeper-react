@@ -1,4 +1,4 @@
-import { IoFlagSharp } from "react-icons/io5"
+import { PiFlagPennantFill } from "react-icons/pi";
 
 export interface FlagBoxProps {
     numFlags: number
@@ -18,7 +18,7 @@ export function FlagBox(props : FlagBoxProps) {
             display: "flex",
             border: "1px solid black"
             }}>
-            <IoFlagSharp color="red"/>
+            <PiFlagPennantFill color="red"/>
             <p style={{fontFamily: "Cabin"}}>{props.numFlags}</p>
         </div>
     )

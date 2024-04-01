@@ -2,7 +2,7 @@ import { useState } from "react";
 import { TileInfo } from "../utils/Minesweeper"
 import { GAME_STATUS } from "./MinesweeperGame";
 import { LongPressEventType, useLongPress } from "use-long-press";
-import { IoFlagSharp } from "react-icons/io5";
+import { PiFlagPennantFill } from "react-icons/pi";
 
 export interface TileProps {
     tileInfo : TileInfo,
@@ -19,7 +19,6 @@ export function Tile(props:TileProps) {
     const [isMouseHovering, setMouseHovering] = useState(false);
     const [isMousePressed, setMousePressed] = useState(false);
     const {minesNearby, isFlagged, isRevealed, isMine} = props.tileInfo;
-    const [isDisabled, setDisabled] = useState(false);
     
     const onClick = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
@@ -33,7 +32,7 @@ export function Tile(props:TileProps) {
 
     const tileText = () => {
         if (isFlagged) {
-            return <IoFlagSharp color="red"/>
+            return <PiFlagPennantFill color="red"/>
         }
         if (!isRevealed) {
             return null;

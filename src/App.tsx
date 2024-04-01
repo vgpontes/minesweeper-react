@@ -1,6 +1,4 @@
-import React from 'react';
 import MinesweeperGame from './components/MinesweeperGame';
-import { Minesweeper } from './utils/Minesweeper';
 
 function App() {
   return (
