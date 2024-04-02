@@ -66,7 +66,11 @@ export default function MinesweeperGame(props:MinesweeperProps) {
         const handleResize = () => {
             // Calculate the tile size based on the screen width and the number of tiles in a row
             const parent = document.getElementById("container")!.parentElement!;
-            const tileSize = Math.min(parent.clientWidth / props.boardWidth, parent.clientHeight / props.boardHeight) - 50;
+            const smileyHeight = document.getElementById("smiley")!.clientHeight;
+            const flagBoxHeight = document.getElementById("flagbox")!.clientHeight;
+            console.log(smileyHeight, flagBoxHeight)
+            const tileSize = Math.min(parent.clientWidth / props.boardWidth, (parent.clientHeight - smileyHeight - flagBoxHeight - 50) / props.boardHeight);
+            console.log(tileSize)
             setTileSize(tileSize);
         };
         handleResize();
