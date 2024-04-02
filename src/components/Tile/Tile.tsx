@@ -2,6 +2,7 @@ import { useState } from "react";
 import { TileInfo } from "../../utils/Minesweeper"
 import { GAME_STATUS } from "../MinesweeperGame/MinesweeperGame";
 import { PiFlagPennantFill } from "react-icons/pi";
+import { LongPressEventType, useLongPress } from "use-long-press"
 import "./Tile.css"
 
 export interface TileProps {
@@ -30,8 +31,10 @@ export default function Tile(props:TileProps) {
 
     const onRightClick = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
-        props.onRightClick(props.rowIndex, props.colIndex);
-        setMousePressed(false);
+        if (!isTouchDevice()) {
+            props.onRightClick(props.rowIndex, props.colIndex);
+            setMousePressed(false);
+        }
     }
 
     const tileText = () => {
@@ -68,16 +71,27 @@ export default function Tile(props:TileProps) {
 
     const bgColor = bgColorPicker();
 
+    const onTouchHold = useLongPress(() => {
+        if (!isRevealed && props.gameStatus == GAME_STATUS.InProgress) {
+            props.onRightClick(props.rowIndex, props.colIndex);
+        };
+    }, {
+        onStart: () => {setMousePressed(true); props.setIsHold(true)},
+        onCancel: () => {setMousePressed(false); props.setIsHold(false)},
+        onFinish: () => {setMousePressed(false); props.setIsHold(false)},
+        filterEvents: () => true,
+        detect: LongPressEventType.Touch
+    });
+
     return (
         <button className="Tile"
         onMouseEnter={() => {if (!isTouchDevice()) setMouseHovering(true)}} 
         onMouseLeave={() => {setMouseHovering(false); setMousePressed(false)}}
         onMouseDown={() => {setMousePressed(true); props.setIsHold(true)}}
         onMouseUp={() => {setMousePressed(false); props.setIsHold(false)}}
-        onTouchStart={() => {setMousePressed(true); props.setIsHold(true)}}
-        onTouchEnd={() => {setMousePressed(false); props.setIsHold(false)}}
         onClick={onClick}
         onContextMenu={onRightClick}
+        {...onTouchHold()}
         disabled={isRevealed || props.gameStatus == GAME_STATUS.Win || props.gameStatus == GAME_STATUS.Lose} 
         style={{backgroundColor: bgColor}}>
             {tileText()}
