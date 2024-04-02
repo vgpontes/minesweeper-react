@@ -1,7 +1,6 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import { TileInfo } from "../../utils/Minesweeper"
 import { GAME_STATUS } from "../MinesweeperGame/MinesweeperGame";
-import { LongPressEventType, useLongPress } from "use-long-press";
 import { PiFlagPennantFill } from "react-icons/pi";
 import "./Tile.css"
 
@@ -12,7 +11,7 @@ export interface TileProps {
     gameStatus: GAME_STATUS
     onClick: (i:number, j:number) => void
     onRightClick: (i:number, j:number) => void
-    onHold: () => void;
+    setIsHold: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function isTouchDevice() {
@@ -25,9 +24,8 @@ export default function Tile(props:TileProps) {
     const [isMousePressed, setMousePressed] = useState(false);
     const {minesNearby, isFlagged, isRevealed, isMine} = props.tileInfo;
     
-    const onClick = (e: React.MouseEvent<HTMLElement>) => {
+    const onClick = () => {
         props.onClick(props.rowIndex, props.colIndex);
-        setMousePressed(false);
     }
 
     const onRightClick = (e: React.MouseEvent<HTMLElement>) => {
@@ -68,27 +66,18 @@ export default function Tile(props:TileProps) {
         return '#EFD8A3' // Dirt color
     }
 
-    const onTouch = useLongPress(() => {
-        if (!isRevealed && props.gameStatus == GAME_STATUS.InProgress) {
-            props.onRightClick(props.rowIndex, props.colIndex);
-        };
-    }, {
-        onStart: () => setMousePressed(true),
-        onFinish: () => setMousePressed(false),
-        filterEvents: () => true,
-        detect: LongPressEventType.Touch
-    });
-
     const bgColor = bgColorPicker();
 
     return (
         <button className="Tile"
         onMouseEnter={() => {if (!isTouchDevice()) setMouseHovering(true)}} 
         onMouseLeave={() => {setMouseHovering(false); setMousePressed(false)}}
-        onMouseDown={() => setMousePressed(true)}
+        onMouseDown={() => {setMousePressed(true); props.setIsHold(true)}}
+        onMouseUp={() => {setMousePressed(false); props.setIsHold(false)}}
+        onTouchStart={() => {setMousePressed(true); props.setIsHold(true)}}
+        onTouchEnd={() => {setMousePressed(false); props.setIsHold(false)}}
         onClick={onClick}
         onContextMenu={onRightClick}
-        {...onTouch()}
         disabled={isRevealed || props.gameStatus == GAME_STATUS.Win || props.gameStatus == GAME_STATUS.Lose} 
         style={{backgroundColor: bgColor}}>
             {tileText()}

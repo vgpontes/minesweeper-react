@@ -111,7 +111,7 @@ export default function MinesweeperGame(props:MinesweeperProps) {
                         gameStatus={gameStatus}
                         onClick={onTileClick}
                         onRightClick={onTileRightClick}
-                        onHold={() => setIsHold(true)}
+                        setIsHold={setIsHold}
                     />))
                 ))}
             </div>
