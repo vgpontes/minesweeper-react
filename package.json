@@ -1,5 +1,5 @@
 {
-  "name": "minesweeper-react",
+  "name": "@vgpontes/minesweeper-react",
   "version": "1.0.0",
   "devDependencies": {
     "@types/node": "^16.18.91",
