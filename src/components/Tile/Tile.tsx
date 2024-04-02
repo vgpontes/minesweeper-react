@@ -26,12 +26,13 @@ export default function Tile(props:TileProps) {
     const {minesNearby, isFlagged, isRevealed, isMine} = props.tileInfo;
     
     const onClick = (e: React.MouseEvent<HTMLElement>) => {
+        props.onClick(props.rowIndex, props.colIndex);
+        setMousePressed(false);
+    }
+
+    const onRightClick = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
-        if (e.button == 0) {
-            props.onClick(props.rowIndex, props.colIndex);
-        } else if (e.button == 2) {
-            props.onRightClick(props.rowIndex, props.colIndex);
-        }
+        props.onRightClick(props.rowIndex, props.colIndex);
         setMousePressed(false);
     }
 
@@ -82,11 +83,11 @@ export default function Tile(props:TileProps) {
 
     return (
         <button className="Tile"
-        onContextMenu={(e)=> e.preventDefault()}
         onMouseEnter={() => {if (!isTouchDevice()) setMouseHovering(true)}} 
         onMouseLeave={() => {setMouseHovering(false); setMousePressed(false)}}
         onMouseDown={() => setMousePressed(true)}
         onClick={onClick}
+        onContextMenu={onRightClick}
         {...onTouch()}
         disabled={isRevealed || props.gameStatus == GAME_STATUS.Win || props.gameStatus == GAME_STATUS.Lose} 
         style={{backgroundColor: bgColor}}>
