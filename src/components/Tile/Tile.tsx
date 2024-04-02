@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { TileInfo } from "../../utils/Minesweeper"
 import { GAME_STATUS } from "../MinesweeperGame/MinesweeperGame";
 import { LongPressEventType, useLongPress } from "use-long-press";
@@ -14,6 +14,11 @@ export interface TileProps {
     onRightClick: (i:number, j:number) => void
     onHold: () => void;
 }
+
+function isTouchDevice() {
+    return (('ontouchstart' in window) ||
+       (navigator.maxTouchPoints > 0))
+  }
 
 export default function Tile(props:TileProps) {
     const [isMouseHovering, setMouseHovering] = useState(false);
@@ -46,7 +51,6 @@ export default function Tile(props:TileProps) {
 
     const bgColorPicker = () => {
         if (isMousePressed) {
-            props.onHold();
             return '#428A3A'
         }
         if (isMouseHovering) {
@@ -63,24 +67,27 @@ export default function Tile(props:TileProps) {
         return '#EFD8A3' // Dirt color
     }
 
-    const longPress = useLongPress(() => {
+    const onTouch = useLongPress(() => {
         if (!isRevealed && props.gameStatus == GAME_STATUS.InProgress) {
             props.onRightClick(props.rowIndex, props.colIndex);
         };
     }, {
+        onStart: () => setMousePressed(true),
+        onFinish: () => setMousePressed(false),
         filterEvents: () => true,
         detect: LongPressEventType.Touch
     });
 
     const bgColor = bgColorPicker();
+
     return (
         <button className="Tile"
         onContextMenu={(e)=> e.preventDefault()}
-        onMouseEnter={() => setMouseHovering(true)} 
+        onMouseEnter={() => {if (!isTouchDevice()) setMouseHovering(true)}} 
         onMouseLeave={() => {setMouseHovering(false); setMousePressed(false)}}
         onMouseDown={() => setMousePressed(true)}
-        onMouseUp={onClick}
-        {...longPress()}
+        onClick={onClick}
+        {...onTouch()}
         disabled={isRevealed || props.gameStatus == GAME_STATUS.Win || props.gameStatus == GAME_STATUS.Lose} 
         style={{backgroundColor: bgColor}}>
             {tileText()}

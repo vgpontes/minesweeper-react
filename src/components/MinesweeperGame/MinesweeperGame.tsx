@@ -68,9 +68,7 @@ export default function MinesweeperGame(props:MinesweeperProps) {
             const parent = document.getElementById("container")!.parentElement!;
             const smileyHeight = document.getElementById("smiley")!.clientHeight;
             const flagBoxHeight = document.getElementById("flagbox")!.clientHeight;
-            console.log(smileyHeight, flagBoxHeight)
             const tileSize = Math.min(parent.clientWidth / props.boardWidth, (parent.clientHeight - smileyHeight - flagBoxHeight - 50) / props.boardHeight);
-            console.log(tileSize)
             setTileSize(tileSize);
         };
         handleResize();
@@ -101,7 +99,8 @@ export default function MinesweeperGame(props:MinesweeperProps) {
             }}>
             <Smiley gameStatus={gameStatus} hold={isHold} onMouseDown={resetGame}/>
             <FlagBox numFlags={numFlags - numFlagsPlaced}/>
-            <div id="container" style={{ display: "grid", gridTemplateColumns: `repeat(${props.boardWidth}, ${tileSize}px)`, gridAutoRows: `${tileSize}px` }}>
+            <div id="container" style={{ display: "grid", gridTemplateColumns: `repeat(${props.boardWidth}, ${tileSize}px)`, gridAutoRows: `${tileSize}px` }}
+                onMouseLeave={() => setIsHold(false)}>
                 {board.map((row, rowIndex) => (
                     row.map((tile, colIndex) => (
                     <Tile
