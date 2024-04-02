@@ -4,7 +4,7 @@ export interface FlagBoxProps {
     numFlags: number
 }
 
-export function FlagBox(props : FlagBoxProps) {
+export default function FlagBox(props : FlagBoxProps) {
     return (
         <div id="flagbox" style={{
             borderRadius: 15,

@@ -1,7 +1,7 @@
-import { GAME_STATUS } from "./MinesweeperGame";
+import { GAME_STATUS } from "../MinesweeperGame/MinesweeperGame";
 import { FaFaceSmile, FaFaceDizzy,FaFaceGrinBeam, FaFaceFlushed } from "react-icons/fa6";
 
-export function Smiley(props : {gameStatus: GAME_STATUS, hold: boolean}) {
+export default function Smiley(props : {gameStatus: GAME_STATUS, hold: boolean}) {
     const smileyFace = () => {
         if (props.gameStatus == GAME_STATUS.Win) {
             return <FaFaceGrinBeam style={{borderRadius: "50%", border: "1px solid black", height: "100%", width: "100%"}} color="yellow"/>;

@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from "react";
-import { Minesweeper, MinesweeperProps, TileInfo } from "../utils/Minesweeper"
-import { Tile } from "./Tile"
-import { FlagBox } from "./FlagBox";
+import { useEffect, useState } from "react";
+import { Minesweeper, MinesweeperProps } from "../../utils/Minesweeper"
+import { Tile } from "../Tile/Tile"
+import { FlagBox } from "../FlagBox/FlagBox";
 import "./Minesweeper.css"
-import { Smiley } from "./Smiley";
+import { Smiley } from "../Smiley/Smiley";
 
 export enum GAME_STATUS {
     InProgress,

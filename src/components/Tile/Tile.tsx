@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { TileInfo } from "../utils/Minesweeper"
-import { GAME_STATUS } from "./MinesweeperGame";
+import { TileInfo } from "../../utils/Minesweeper"
+import { GAME_STATUS } from "../MinesweeperGame/MinesweeperGame";
 import { LongPressEventType, useLongPress } from "use-long-press";
 import { PiFlagPennantFill } from "react-icons/pi";
 
@@ -15,7 +15,7 @@ export interface TileProps {
     onHold: () => void;
 }
 
-export function Tile(props:TileProps) {
+export default function Tile(props:TileProps) {
     const [isMouseHovering, setMouseHovering] = useState(false);
     const [isMousePressed, setMousePressed] = useState(false);
     const {minesNearby, isFlagged, isRevealed, isMine} = props.tileInfo;
