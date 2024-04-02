@@ -3,6 +3,7 @@ import { TileInfo } from "../../utils/Minesweeper"
 import { GAME_STATUS } from "../MinesweeperGame/MinesweeperGame";
 import { LongPressEventType, useLongPress } from "use-long-press";
 import { PiFlagPennantFill } from "react-icons/pi";
+import "./Tile.css"
 
 export interface TileProps {
     tileInfo : TileInfo,
@@ -40,7 +41,7 @@ export default function Tile(props:TileProps) {
             return <p style={{userSelect:"none"}}>{"\u{1F4A3}"}</p>;
         }
         const fontColor = new Map([[1, "blue"], [2, "green"], [3, "red"], [4, "purple"]]);
-        return minesNearby ? <p style={{userSelect: "none", fontFamily:"Cabin", fontSize:24, color: (fontColor.get(minesNearby) || "black")}}>{minesNearby}</p> : null//minesNearby ? minesNearby : "";
+        return minesNearby ? <p className="TileText" style={{userSelect: "none", fontFamily:"Cabin", color: (fontColor.get(minesNearby) || "black")}}>{minesNearby}</p> : null//minesNearby ? minesNearby : "";
     }
 
     const bgColorPicker = () => {
