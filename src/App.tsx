@@ -1,4 +1,4 @@
-import MinesweeperGame from "./components";
+import { MinesweeperGame } from "./components";
 
 function App() { 
   return (

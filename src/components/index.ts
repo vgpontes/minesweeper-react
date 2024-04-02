@@ -1,2 +1,5 @@
 import MinesweeperGame from "./MinesweeperGame"
-export default MinesweeperGame
+import FlagBox from "./FlagBox"
+import Smiley from "./Smiley"
+import Tile from "./Tile"
+export { MinesweeperGame, FlagBox, Smiley, Tile }
