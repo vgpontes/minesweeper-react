@@ -1,5 +1,4 @@
-import { useEffect } from 'react';
-import MinesweeperGame from './components/MinesweeperGame/MinesweeperGame';
+import MinesweeperGame from "./components";
 
 function App() { 
   return (

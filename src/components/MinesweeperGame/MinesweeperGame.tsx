@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Minesweeper, MinesweeperProps } from "../../utils/Minesweeper"
-import { Tile } from "../Tile/Tile"
-import { FlagBox } from "../FlagBox/FlagBox";
+import Tile from "../Tile/Tile"
+import FlagBox from "../FlagBox/FlagBox";
 import "./Minesweeper.css"
-import { Smiley } from "../Smiley/Smiley";
+import Smiley from "../Smiley/Smiley";
 
 export enum GAME_STATUS {
     InProgress,
@@ -62,21 +62,31 @@ export default function MinesweeperGame(props:MinesweeperProps) {
         setIsHold(false)
     }
 
-      useEffect(() => {
+    useEffect(() => {
         const handleResize = () => {
-          // Calculate the tile size based on the screen width and the number of tiles in a row
-          const parent = document.getElementById("container")!.parentElement!;
-          const tileSize = Math.min(parent.clientWidth / props.boardWidth, parent.clientHeight / props.boardHeight) - 100;
-          setTileSize(tileSize);
+            // Calculate the tile size based on the screen width and the number of tiles in a row
+            const parent = document.getElementById("container")!.parentElement!;
+            const tileSize = Math.min(parent.clientWidth / props.boardWidth, parent.clientHeight / props.boardHeight) - 100;
+            setTileSize(tileSize);
         };
         handleResize();
         window.addEventListener("resize", handleResize);
         return () => {
-          window.removeEventListener("resize", handleResize);
+            window.removeEventListener("resize", handleResize);
         };
-      }, []);
+    }, []);
 
-      return (
+    const resetGame = () => {
+        const newGame = new Minesweeper({boardHeight: props.boardHeight, boardWidth: props.boardWidth, numMines: numFlags});
+        setGame(newGame);
+        setBoard(newGame.board);
+        setRevealCount(0);
+        setFirstPress(true);
+        setGameStatus(GAME_STATUS.InProgress);
+        setNumFlagsPlaced(0);
+    };
+
+    return (
         <div style={{
             height: "100%", 
             width: "100%", 
@@ -85,7 +95,7 @@ export default function MinesweeperGame(props:MinesweeperProps) {
             alignItems: "center", 
             flexDirection: "column"
             }}>
-            <Smiley gameStatus={gameStatus} hold={isHold}/>
+            <Smiley gameStatus={gameStatus} hold={isHold} onMouseDown={resetGame}/>
             <FlagBox numFlags={numFlags - numFlagsPlaced}/>
             <div id="container" style={{ display: "grid", gridTemplateColumns: `repeat(${props.boardWidth}, ${tileSize}px)`, gridAutoRows: `${tileSize}px` }}>
                 {board.map((row, rowIndex) => (
@@ -104,6 +114,5 @@ export default function MinesweeperGame(props:MinesweeperProps) {
                 ))}
             </div>
         </div>
-    )
-    
+    );
 }
