@@ -105,7 +105,6 @@ export default function MinesweeperGame(props:MinesweeperProps) {
                         tileInfo={tile}
                         rowIndex={rowIndex}
                         colIndex={colIndex}
-                        tileSize={tileSize}
                         gameStatus={gameStatus}
                         onClick={onTileClick}
                         onRightClick={onTileRightClick}

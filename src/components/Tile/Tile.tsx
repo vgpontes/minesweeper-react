@@ -8,7 +8,6 @@ export interface TileProps {
     tileInfo : TileInfo,
     rowIndex: number,
     colIndex: number,
-    tileSize: number,
     gameStatus: GAME_STATUS
     onClick: (i:number, j:number) => void
     onRightClick: (i:number, j:number) => void
@@ -82,7 +81,7 @@ export default function Tile(props:TileProps) {
         onMouseUp={onClick}
         {...longPress()}
         disabled={isRevealed || props.gameStatus == GAME_STATUS.Win || props.gameStatus == GAME_STATUS.Lose} 
-        style={{width: props.tileSize, height: props.tileSize, backgroundColor: bgColor}}>
+        style={{backgroundColor: bgColor}}>
             {tileText()}
         </button>
     )
