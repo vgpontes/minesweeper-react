@@ -22,8 +22,8 @@ export class Minesweeper {
     private numMines : number;
 
     constructor(props : MinesweeperProps) {
-        this.board = new Array(props.boardWidth).fill(null).map(() => {
-            return new Array(props.boardHeight).fill(null).map(() => ({
+        this.board = new Array(props.boardHeight).fill(null).map(() => {
+            return new Array(props.boardWidth).fill(null).map(() => ({
                 minesNearby: 0,
                 isMine: false,
                 isFlagged: false,
