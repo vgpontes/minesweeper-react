@@ -27,7 +27,9 @@ export default function Tile(props:TileProps) {
     
     const onClick = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
-        if (e.button !== -1) {
+        // make it so only mouse left click
+        if (e.button === 1) {
+            console.log(e)
             props.onClick(props.rowIndex, props.colIndex);
         }
     }
@@ -35,7 +37,8 @@ export default function Tile(props:TileProps) {
 
     const onRightClick = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
-        if (e.button !== -1) {
+        // make it so only mouse right click
+        if (e.button === 2) {
             props.onRightClick(props.rowIndex, props.colIndex);
             setMousePressed(false);
         }
