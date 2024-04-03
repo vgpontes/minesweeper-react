@@ -53,6 +53,8 @@ export default function MinesweeperGame(props:MinesweeperProps) {
     }
 
     const onTileRightClick = (rowIndex : number, colIndex : number) => {
+        if (gameStatus !== GAME_STATUS.InProgress) return;
+        
         const newBoard = [...board];
         const tileIsFlagged = newBoard[rowIndex][colIndex].isFlagged
         newBoard[rowIndex][colIndex].isFlagged = !tileIsFlagged
