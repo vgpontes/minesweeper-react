@@ -25,14 +25,17 @@ export default function Tile(props:TileProps) {
     const [isMousePressed, setMousePressed] = useState(false);
     const {minesNearby, isFlagged, isRevealed, isMine} = props.tileInfo;
     
-    const onClick = () => {
-        props.onClick(props.rowIndex, props.colIndex);
+    const onClick = (e: React.MouseEvent<HTMLElement>) => {
+        if (!isTouchDevice()) {
+            props.onClick(props.rowIndex, props.colIndex);
+        }
     }
     
 
     const onRightClick = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
         if (e.button !== -1) {
+            console.log("clicked");
             props.onRightClick(props.rowIndex, props.colIndex);
             setMousePressed(false);
         }
@@ -78,7 +81,7 @@ export default function Tile(props:TileProps) {
         };
     }, {
         onStart: () => {setMousePressed(true); props.setIsHold(true)},
-        onCancel: () => {setMousePressed(false); props.setIsHold(false)},
+        onCancel: () => {props.onClick(props.rowIndex, props.colIndex); setMousePressed(false); props.setIsHold(false)},
         onFinish: () => {setMousePressed(false); props.setIsHold(false)},
         filterEvents: () => true,
         detect: LongPressEventType.Touch
@@ -92,6 +95,7 @@ export default function Tile(props:TileProps) {
         onMouseUp={() => {setMousePressed(false); props.setIsHold(false)}}
         onClick={onClick}
         onContextMenu={onRightClick}
+        onTouchCancel={() => {setMousePressed(false); props.setIsHold(false)}}
         {...onTouchHold()}
         disabled={isRevealed || props.gameStatus == GAME_STATUS.Win || props.gameStatus == GAME_STATUS.Lose} 
         style={{backgroundColor: bgColor}}>
