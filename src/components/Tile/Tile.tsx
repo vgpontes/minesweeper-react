@@ -81,7 +81,12 @@ export default function Tile(props:TileProps) {
         };
     }, {
         onStart: () => {setMousePressed(true); props.setIsHold(true)},
-        onCancel: () => {props.onClick(props.rowIndex, props.colIndex); setMousePressed(false); props.setIsHold(false)},
+        onCancel: () => {
+            if (!isRevealed && props.gameStatus == GAME_STATUS.InProgress) {
+                props.onClick(props.rowIndex, props.colIndex);
+            };
+            setMousePressed(false);
+            props.setIsHold(false)},
         onFinish: () => {setMousePressed(false); props.setIsHold(false)},
         filterEvents: () => true,
         detect: LongPressEventType.Touch
