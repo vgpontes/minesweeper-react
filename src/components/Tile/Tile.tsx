@@ -26,7 +26,8 @@ export default function Tile(props:TileProps) {
     const {minesNearby, isFlagged, isRevealed, isMine} = props.tileInfo;
     
     const onClick = (e: React.MouseEvent<HTMLElement>) => {
-        if (!isTouchDevice()) {
+        e.preventDefault();
+        if (e.button !== -1) {
             props.onClick(props.rowIndex, props.colIndex);
         }
     }
@@ -35,7 +36,6 @@ export default function Tile(props:TileProps) {
     const onRightClick = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
         if (e.button !== -1) {
-            console.log("clicked");
             props.onRightClick(props.rowIndex, props.colIndex);
             setMousePressed(false);
         }
