@@ -28,10 +28,11 @@ export default function Tile(props:TileProps) {
     const onClick = () => {
         props.onClick(props.rowIndex, props.colIndex);
     }
+    
 
     const onRightClick = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
-        if (!isTouchDevice()) {
+        if (e.button !== -1) {
             props.onRightClick(props.rowIndex, props.colIndex);
             setMousePressed(false);
         }
