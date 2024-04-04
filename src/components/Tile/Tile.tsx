@@ -23,14 +23,15 @@ function isTouchDevice() {
 export default function Tile(props:TileProps) {
     const [isMouseHovering, setMouseHovering] = useState(false);
     const [isMousePressed, setMousePressed] = useState(false);
+    const [isUnflagging, setIsUnflagging] = useState(false)
     const {minesNearby, isFlagged, isRevealed, isMine} = props.tileInfo;
     
     const onClick = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
-        // make it so only mouse left click
-        if (e.button === 1) {
-            console.log(e)
+        if (!isUnflagging) {
             props.onClick(props.rowIndex, props.colIndex);
+        } else {
+            setIsUnflagging(false)
         }
     }
     
@@ -90,7 +91,14 @@ export default function Tile(props:TileProps) {
             };
             setMousePressed(false);
             props.setIsHold(false)},
-        onFinish: () => {setMousePressed(false); props.setIsHold(false)},
+        onFinish: () => {
+            if (isFlagged) {
+                setIsUnflagging(false);
+            } else {
+                setIsUnflagging(true);
+            }
+            setMousePressed(false); 
+            props.setIsHold(false)},
         filterEvents: () => true,
         detect: LongPressEventType.Touch
     });
@@ -103,7 +111,6 @@ export default function Tile(props:TileProps) {
         onMouseUp={() => {setMousePressed(false); props.setIsHold(false)}}
         onClick={onClick}
         onContextMenu={onRightClick}
-        onTouchCancel={() => {setMousePressed(false); props.setIsHold(false)}}
         {...onTouchHold()}
         disabled={isRevealed || props.gameStatus == GAME_STATUS.Win || props.gameStatus == GAME_STATUS.Lose} 
         style={{backgroundColor: bgColor}}>
