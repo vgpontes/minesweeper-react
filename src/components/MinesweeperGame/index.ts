@@ -1,1 +1,1 @@
-export { default } from './MinesweeperGame';
+export { default as MinesweeperGame } from './MinesweeperGame';

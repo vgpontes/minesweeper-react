@@ -1,5 +1,4 @@
-import MinesweeperGame from "./MinesweeperGame"
-import FlagBox from "./FlagBox"
-import Smiley from "./Smiley"
-import Tile from "./Tile"
-export { MinesweeperGame, FlagBox, Smiley, Tile }
+export * from './FlagBox';
+export * from './MinesweeperGame';
+export * from './Smiley';
+export * from './Tile';

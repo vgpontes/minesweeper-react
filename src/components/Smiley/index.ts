@@ -1,1 +1,1 @@
-export { default } from './Smiley';
+export { default as Smiley } from './Smiley';

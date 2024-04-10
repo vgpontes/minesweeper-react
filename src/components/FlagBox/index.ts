@@ -1,1 +1,1 @@
-export { default } from './FlagBox';
+export { default as FlagBox } from './FlagBox';
