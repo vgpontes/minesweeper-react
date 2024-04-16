@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { TileInfo } from "../../utils/Minesweeper"
+import { TileInfo } from "../MinesweeperGame/Minesweeper"
 import { GAME_STATUS } from "../MinesweeperGame/MinesweeperGame";
 import { PiFlagPennantFill } from "react-icons/pi";
 import { LongPressEventType, useLongPress } from "use-long-press"
+import "@fontsource/cabin"
 import "./Tile.css"
 
 export interface TileProps {

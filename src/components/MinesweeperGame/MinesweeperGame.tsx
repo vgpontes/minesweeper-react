@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Minesweeper, MinesweeperProps } from "../../utils/Minesweeper"
+import { Minesweeper, MinesweeperProps } from "./Minesweeper"
 import Tile from "../Tile/Tile"
 import FlagBox from "../FlagBox/FlagBox";
 import "./Minesweeper.css"
