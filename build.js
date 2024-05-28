@@ -1,12 +1,11 @@
 const esbuild = require('esbuild');
 const { nodeExternalsPlugin } = require('esbuild-node-externals');
-const { sassPlugin } = require('esbuild-sass-plugin');
 
 const sharedConfig = {
     bundle: true,
     entryPoints: ["src/components/index.ts"],
     sourcemap: true,
-    plugins: [nodeExternalsPlugin(), sassPlugin({type: "style"})],
+    plugins: [nodeExternalsPlugin()],
     external: ["react", "react-dom"]
 }
 
