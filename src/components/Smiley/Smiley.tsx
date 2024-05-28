@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { GAME_STATUS } from "../MinesweeperGame/MinesweeperGame";
+import { GAME_STATUS } from "../MinesweeperGame/GameStatus";
 import { FaFaceSmile, FaFaceDizzy,FaFaceGrinBeam, FaFaceFlushed } from "react-icons/fa6";
 
 export default function Smiley(props : {gameStatus: GAME_STATUS, hold: boolean, onMouseDown: () => void}) {

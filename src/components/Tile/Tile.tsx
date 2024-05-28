@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { TileInfo } from "../MinesweeperGame/Minesweeper"
-import { GAME_STATUS } from "../MinesweeperGame/MinesweeperGame";
+import { GAME_STATUS } from "../MinesweeperGame/GameStatus";
 import { PiFlagPennantFill } from "react-icons/pi";
 import { LongPressEventType, useLongPress } from "use-long-press"
 import "@fontsource/cabin"

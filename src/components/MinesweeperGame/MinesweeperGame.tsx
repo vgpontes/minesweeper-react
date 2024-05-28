@@ -4,12 +4,7 @@ import Tile from "../Tile/Tile"
 import FlagBox from "../FlagBox/FlagBox";
 import "./Minesweeper.css"
 import Smiley from "../Smiley/Smiley";
-
-export enum GAME_STATUS {
-    InProgress,
-    Win,
-    Lose
-}
+import { GAME_STATUS } from "./GameStatus";
 
 export default function MinesweeperGame(props:MinesweeperProps) {
     const [game, setGame] = useState(new Minesweeper(props))
