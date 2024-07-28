@@ -4,7 +4,6 @@ import { GAME_STATUS } from "../MinesweeperGame/GameStatus";
 import { PiFlagPennantFill } from "react-icons/pi";
 import { LongPressEventType, useLongPress } from "use-long-press"
 import "@fontsource/cabin"
-import "./Tile.css"
 
 export interface TileProps {
     tileInfo : TileInfo,
@@ -19,7 +18,7 @@ export interface TileProps {
 function isTouchDevice() {
     return (('ontouchstart' in window) ||
        (navigator.maxTouchPoints > 0))
-  }
+}
 
 export default function Tile(props:TileProps) {
     const [isMouseHovering, setMouseHovering] = useState(false);
@@ -114,8 +113,47 @@ export default function Tile(props:TileProps) {
         onContextMenu={onRightClick}
         {...onTouchHold()}
         disabled={isRevealed || props.gameStatus == GAME_STATUS.Win || props.gameStatus == GAME_STATUS.Lose} 
-        style={{backgroundColor: bgColor}}>
+        style={{
+            backgroundColor: bgColor,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            width: "100%",
+            transitionDuration: "0.4s",
+            borderStyle: "none",
+            borderRadius: "4%",
+            border: "1px solid black"
+            }}>
             {tileText()}
         </button>
     )
 }
+
+// .Tile {
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     width: 100%;
+//     transition-duration: 0.4s;
+//     border-style: none;
+//     border-radius: 4%;
+//     border: 1px solid black;
+// }
+
+// @media screen and (max-width: 480px) {
+//     .TileText {
+//         font-size: 1.5em;
+//     }
+// }
+
+// @media screen and (min-width: 480px) and (max-width: 1200px) {
+//     .TileText {
+//         font-size: 2em;
+//     }
+// }
+
+// .Tile:disabled,
+// .Tile[disabled]{
+//     color: black;
+//     border-color: black;
+// }
