@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Minesweeper, MinesweeperProps } from "./Minesweeper"
 import Tile from "../Tile/Tile"
 import FlagBox from "../FlagBox/FlagBox";
@@ -14,8 +14,9 @@ export default function MinesweeperGame(props:MinesweeperProps) {
     const [board, setBoard] = useState(game.board);
     const [numFlagsPlaced, setNumFlagsPlaced] = useState(0);
     const [isHold, setIsHold] = useState(false);
-    const [tileSize, setTileSize] = useState(50);
     const numFlags = game.getNumMines();
+
+    const tileWidth = Math.min(props.boardHeight, props.boardWidth);
 
     const onTileClick = (rowIndex:number, colIndex:number) => {
         if (board[rowIndex][colIndex].isRevealed ||
@@ -59,22 +60,6 @@ export default function MinesweeperGame(props:MinesweeperProps) {
         setIsHold(false)
     }
 
-    useEffect(() => {
-        const handleResize = () => {
-            // Calculate the tile size based on the screen width and the number of tiles in a row
-            const parent = document.getElementById("container")!.parentElement!;
-            const smileyHeight = document.getElementById("smiley")!.clientHeight;
-            const flagBoxHeight = document.getElementById("flagbox")!.clientHeight;
-            const tileSize = Math.min(parent.clientWidth / props.boardWidth, (parent.clientHeight - smileyHeight - flagBoxHeight - 50) / props.boardHeight);
-            setTileSize(tileSize);
-        };
-        handleResize();
-        window.addEventListener("resize", handleResize);
-        return () => {
-            window.removeEventListener("resize", handleResize);
-        };
-    }, []);
-
     const resetGame = () => {
         const newGame = new Minesweeper({boardHeight: props.boardHeight, boardWidth: props.boardWidth, numMines: numFlags});
         setGame(newGame);
@@ -87,16 +72,24 @@ export default function MinesweeperGame(props:MinesweeperProps) {
 
     return (
         <div style={{
-            height: "100%", 
-            width: "100%", 
-            display: "flex", 
+            display: "flex",
+            height: '80%',
+            width: '80%',
             justifyContent: "center", 
             alignItems: "center", 
-            flexDirection: "column"
+            flexDirection: "column",
+            backgroundColor: "pink"
             }}>
-            <Smiley gameStatus={gameStatus} hold={isHold} onMouseDown={resetGame}/>
-            <FlagBox numFlags={numFlags - numFlagsPlaced}/>
-            <div id="container" style={{ display: "grid", gridTemplateColumns: `repeat(${props.boardWidth}, ${tileSize}px)`, gridAutoRows: `${tileSize}px` }}
+                <div style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center"
+                }}>
+                    <Smiley gameStatus={gameStatus} hold={isHold} onMouseDown={resetGame}/>
+                    <FlagBox numFlags={numFlags - numFlagsPlaced}/>
+                </div>
+            <div id="container" style={{display: 'grid', gridTemplateColumns: `repeat(${tileWidth},1fr)`, height: '100%', width: '100%', backgroundColor: 'blue'}}
                 onMouseLeave={() => setIsHold(false)}>
                 {board.map((row, rowIndex) => (
                     row.map((tile, colIndex) => (

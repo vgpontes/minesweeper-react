@@ -118,7 +118,7 @@ export default function Tile(props:TileProps) {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            width: "100%",
+            aspectRatio: 1,
             transitionDuration: "0.4s",
             borderStyle: "none",
             borderRadius: "4%",
@@ -128,32 +128,3 @@ export default function Tile(props:TileProps) {
         </button>
     )
 }
-
-// .Tile {
-//     display: flex;
-//     justify-content: center;
-//     align-items: center;
-//     width: 100%;
-//     transition-duration: 0.4s;
-//     border-style: none;
-//     border-radius: 4%;
-//     border: 1px solid black;
-// }
-
-// @media screen and (max-width: 480px) {
-//     .TileText {
-//         font-size: 1.5em;
-//     }
-// }
-
-// @media screen and (min-width: 480px) and (max-width: 1200px) {
-//     .TileText {
-//         font-size: 2em;
-//     }
-// }
-
-// .Tile:disabled,
-// .Tile[disabled]{
-//     color: black;
-//     border-color: black;
-// }
