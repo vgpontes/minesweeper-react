@@ -12,9 +12,9 @@ export default function FlagBox(props : FlagBoxProps) {
             alignItems: "center",
             userSelect: "none",
             backgroundColor: "#8FE186",
-            padding: 20,
-            gap: 25,
-            marginBottom: 10,
+            paddingLeft: 5,
+            paddingRight: 5,
+            gap: 10,
             display: "flex",
             border: "1px solid black"
             }}>

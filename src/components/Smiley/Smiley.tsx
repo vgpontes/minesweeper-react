@@ -26,13 +26,10 @@ export default function Smiley(props : {gameStatus: GAME_STATUS, hold: boolean, 
     return (
         <button id="smiley" onMouseDown={onMouseDown} onMouseUp={() => setMousePressed(false)} style={{
             borderRadius: 15,
-            justifyContent: 'center',
-            alignItems: 'center',
             userSelect: "none",
             backgroundColor: isMousePressed ? "darkgray" : "lightgrey",
-            marginBottom: 10,
-            padding: 20,
-            border: "1px solid black"
+            padding: 10,
+            border: "1px solid black",
             }}>
             <span style={{
                 height: "30px",

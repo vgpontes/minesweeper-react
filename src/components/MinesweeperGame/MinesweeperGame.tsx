@@ -100,8 +100,10 @@ export default function MinesweeperGame(props:MinesweeperProps) {
     
     return (
         <div ref={parentRef} style={{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", height: "100%", width: "100%"}}>
-            <Smiley gameStatus={gameStatus} hold={isHold} onMouseDown={resetGame}/>
-            <FlagBox numFlags={numFlags - numFlagsPlaced}/>
+            <div id="smile-flag" style={{display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center"}}>
+                <Smiley gameStatus={gameStatus} hold={isHold} onMouseDown={resetGame}/>
+                <FlagBox numFlags={numFlags - numFlagsPlaced}/>
+            </div>
             <div style={{
                 display: "grid", 
                 gridTemplateColumns: `repeat(${props.boardWidth}, 1fr)`, 
