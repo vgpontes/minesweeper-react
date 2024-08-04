@@ -72,11 +72,13 @@ export default function MinesweeperGame(props:MinesweeperProps) {
     const [parentDimensions, setParentDimensions] = useState({ width: 0, height: 0 });
 
     useEffect(() => {
+        const smileBox = document.getElementById('smile-flag');
+
         const handleResize = () => {
-          if (parentRef.current) {
+          if (parentRef.current && smileBox) {
             setParentDimensions({
               width: parentRef.current.offsetWidth,
-              height: parentRef.current.offsetHeight
+              height: parentRef.current.offsetHeight - smileBox.offsetHeight
             });
           }
         };
@@ -99,17 +101,16 @@ export default function MinesweeperGame(props:MinesweeperProps) {
     const isParentWider = width > height;
     
     return (
-        <div ref={parentRef} style={{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", height: "100%", width: "100%"}}>
-            <div id="smile-flag" style={{display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center"}}>
+        <div ref={parentRef} style={{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", height: "100%", width: "100%", overflow: "hidden"}}>
+            <div id="smile-flag" style={{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
                 <Smiley gameStatus={gameStatus} hold={isHold} onMouseDown={resetGame}/>
                 <FlagBox numFlags={numFlags - numFlagsPlaced}/>
             </div>
             <div style={{
                 display: "grid", 
                 gridTemplateColumns: `repeat(${props.boardWidth}, 1fr)`, 
-                backgroundColor: "blue", 
-                height: isParentWider ? "100%" : 'auto', 
-                width: isParentWider ? 'auto' : "100%",}}>
+                height: isParentWider ? '100%' : 'auto', 
+                width: isParentWider ? 'auto': '100%',}}>
             {board.map((row, rowIndex) => (
                 row.map((tile, colIndex) => (
                 <Tile

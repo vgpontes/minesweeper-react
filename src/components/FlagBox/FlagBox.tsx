@@ -19,7 +19,7 @@ export default function FlagBox(props : FlagBoxProps) {
             border: "1px solid black"
             }}>
             <PiFlagPennantFill color="red"/>
-            <p style={{fontFamily: "Cabin"}}>{props.numFlags}</p>
+            <p style={{fontFamily: "Cabin", color: "black"}}>{props.numFlags}</p>
         </div>
     )
 }
