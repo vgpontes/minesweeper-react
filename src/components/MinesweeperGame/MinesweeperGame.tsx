@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Minesweeper, MinesweeperProps } from "./Minesweeper"
 import Tile from "../Tile/Tile"
 import FlagBox from "../FlagBox/FlagBox";
@@ -15,8 +15,6 @@ export default function MinesweeperGame(props:MinesweeperProps) {
     const [numFlagsPlaced, setNumFlagsPlaced] = useState(0);
     const [isHold, setIsHold] = useState(false);
     const numFlags = game.getNumMines();
-
-    const tileWidth = Math.min(props.boardHeight, props.boardWidth);
 
     const onTileClick = (rowIndex:number, colIndex:number) => {
         if (board[rowIndex][colIndex].isRevealed ||
@@ -70,40 +68,60 @@ export default function MinesweeperGame(props:MinesweeperProps) {
         setNumFlagsPlaced(0);
     };
 
+    const parentRef = useRef<HTMLDivElement>(null);
+    const [parentDimensions, setParentDimensions] = useState({ width: 0, height: 0 });
+
+    useEffect(() => {
+        const handleResize = () => {
+          if (parentRef.current) {
+            setParentDimensions({
+              width: parentRef.current.offsetWidth,
+              height: parentRef.current.offsetHeight
+            });
+          }
+        };
+    
+        const resizeObserver = new ResizeObserver(handleResize);
+        if (parentRef.current) {
+          resizeObserver.observe(parentRef.current);
+        }
+
+        handleResize();
+
+        return () => {
+            if (parentRef.current) {
+              resizeObserver.unobserve(parentRef.current);
+            }
+          };
+    }, []);
+
+    const { width, height } = parentDimensions;
+    const isParentWider = width > height;
+    
     return (
-        <div style={{
-            display: "flex",
-            height: '80%',
-            width: '80%',
-            justifyContent: "center", 
-            alignItems: "center", 
-            flexDirection: "column",
-            backgroundColor: "pink"
-            }}>
-                <div style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    alignItems: "center"
-                }}>
-                    <Smiley gameStatus={gameStatus} hold={isHold} onMouseDown={resetGame}/>
-                    <FlagBox numFlags={numFlags - numFlagsPlaced}/>
-                </div>
-            <div id="container" style={{display: 'grid', gridTemplateColumns: `repeat(${tileWidth},1fr)`, height: '100%', width: '100%', backgroundColor: 'blue'}}
-                onMouseLeave={() => setIsHold(false)}>
-                {board.map((row, rowIndex) => (
-                    row.map((tile, colIndex) => (
-                    <Tile
-                        key={`${rowIndex}-${colIndex}`}
-                        tileInfo={tile}
-                        rowIndex={rowIndex}
-                        colIndex={colIndex}
-                        gameStatus={gameStatus}
-                        onClick={onTileClick}
-                        onRightClick={onTileRightClick}
-                        setIsHold={setIsHold}
-                    />))
-                ))}
+        <div ref={parentRef} style={{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", height: "100%", width: "100%"}}>
+            <Smiley gameStatus={gameStatus} hold={isHold} onMouseDown={resetGame}/>
+            <FlagBox numFlags={numFlags - numFlagsPlaced}/>
+            <div style={{
+                display: "grid", 
+                gridTemplateColumns: `repeat(${props.boardWidth}, 1fr)`, 
+                backgroundColor: "blue", 
+                height: isParentWider ? "100%" : 'auto', 
+                width: isParentWider ? 'auto' : "100%",}}>
+            {board.map((row, rowIndex) => (
+                row.map((tile, colIndex) => (
+                <Tile
+                    key={`${rowIndex}-${colIndex}`}
+                    tileInfo={tile}
+                    rowIndex={rowIndex}
+                    colIndex={colIndex}
+                    gameStatus={gameStatus}
+                    onClick={onTileClick}
+                    onRightClick={onTileRightClick}
+                    setIsHold={setIsHold}
+                />
+                )
+            )))}
             </div>
         </div>
     );

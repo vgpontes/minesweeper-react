@@ -103,6 +103,31 @@ export default function Tile(props:TileProps) {
         detect: LongPressEventType.Touch
     });
 
+    const old = <button className="Tile"
+    onMouseEnter={() => {if (!isTouchDevice()) setMouseHovering(true)}} 
+    onMouseLeave={() => {setMouseHovering(false); setMousePressed(false)}}
+    onMouseDown={() => {setMousePressed(true); props.setIsHold(true)}}
+    onMouseUp={() => {setMousePressed(false); props.setIsHold(false)}}
+    onClick={onClick}
+    onContextMenu={onRightClick}
+    {...onTouchHold()}
+    disabled={isRevealed || props.gameStatus == GAME_STATUS.Win || props.gameStatus == GAME_STATUS.Lose} 
+    style={{
+        backgroundColor: bgColor,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        aspectRatio: 1,
+        transitionDuration: "0.4s",
+        borderStyle: "none",
+        borderRadius: "4%",
+        border: "1px solid black"
+        }}>
+        {tileText()}
+    </button>
+
+    old;
+
     return (
         <button className="Tile"
         onMouseEnter={() => {if (!isTouchDevice()) setMouseHovering(true)}} 
@@ -124,7 +149,7 @@ export default function Tile(props:TileProps) {
             borderRadius: "4%",
             border: "1px solid black"
             }}>
-            {tileText()}
+                <p style={{position: "absolute"}}>{tileText()}</p>
         </button>
     )
 }
